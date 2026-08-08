@@ -6,10 +6,11 @@ import com.example.mini.mapper.OrderMapper;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 
 /**
- * 支付接口（开发环境模拟支付）
+ * 支付接口（开发环境模拟支付，需要 JWT 认证）
  * 生产环境应替换为真实的微信支付接口
  */
 @RestController
@@ -21,10 +22,11 @@ public class PayController {
 
     /**
      * 模拟支付：直接将订单状态改为已支付（待服务）
-     * 仅限开发环境使用！生产环境必须删除并替换为真实微信支付
+     * openId 从 token 中获取
      */
     @PostMapping("/mock/{orderId}")
-    public Result<String> mockPay(@PathVariable Long orderId, @RequestParam String openId) {
+    public Result<String> mockPay(@PathVariable Long orderId, HttpServletRequest request) {
+        String openId = (String) request.getAttribute("openId");
         Order order = orderMapper.selectById(orderId);
 
         if (order == null) {

@@ -28,17 +28,24 @@ Page({
     this.loadOrders()
   },
 
+  // 获取认证请求头
+  getAuthHeader() {
+    const token = wx.getStorageSync('token')
+    return { 'Authorization': `Bearer ${token}` }
+  },
+
   // 加载订单列表
   loadOrders() {
-    const openId = wx.getStorageSync('openId')
-    if (!openId) {
+    const token = wx.getStorageSync('token')
+    if (!token) {
       this.setData({ orderList: [] })
       return
     }
 
     wx.request({
-      url: `${app.globalData.baseUrl}/api/order/my?openId=${openId}`,
+      url: `${app.globalData.baseUrl}/api/order/my`,
       method: 'GET',
+      header: this.getAuthHeader(),
       success: (res) => {
         if (res.data.code === 200) {
           this.setData({ orderList: res.data.data })
@@ -53,7 +60,6 @@ Page({
   // 模拟支付
   payOrder(e) {
     const id = e.currentTarget.dataset.id
-    const openId = wx.getStorageSync('openId')
 
     wx.showModal({
       title: '确认支付',
@@ -62,8 +68,9 @@ Page({
         if (res.confirm) {
           wx.showLoading({ title: '支付中...' })
           wx.request({
-            url: `${app.globalData.baseUrl}/api/pay/mock/${id}?openId=${openId}`,
+            url: `${app.globalData.baseUrl}/api/pay/mock/${id}`,
             method: 'POST',
+            header: this.getAuthHeader(),
             success: (res) => {
               wx.hideLoading()
               if (res.data.code === 200) {
@@ -86,7 +93,6 @@ Page({
   // 取消订单
   cancelOrder(e) {
     const id = e.currentTarget.dataset.id
-    const openId = wx.getStorageSync('openId')
 
     wx.showModal({
       title: '提示',
@@ -94,8 +100,9 @@ Page({
       success: (res) => {
         if (res.confirm) {
           wx.request({
-            url: `${app.globalData.baseUrl}/api/order/cancel/${id}?openId=${openId}`,
+            url: `${app.globalData.baseUrl}/api/order/cancel/${id}`,
             method: 'POST',
+            header: this.getAuthHeader(),
             success: (res) => {
               if (res.data.code === 200) {
                 wx.showToast({ title: '已取消', icon: 'success' })

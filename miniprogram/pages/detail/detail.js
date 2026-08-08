@@ -65,8 +65,8 @@ Page({
       return
     }
 
-    const openId = wx.getStorageSync('openId')
-    if (!openId) {
+    const token = wx.getStorageSync('token')
+    if (!token) {
       wx.showToast({ title: '请先登录', icon: 'none' })
       return
     }
@@ -76,8 +76,11 @@ Page({
     wx.request({
       url: `${app.globalData.baseUrl}/api/order/create`,
       method: 'POST',
+      header: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
       data: {
-        openId: openId,
         serviceId: service.id,
         contactName: contactName,
         contactPhone: contactPhone,

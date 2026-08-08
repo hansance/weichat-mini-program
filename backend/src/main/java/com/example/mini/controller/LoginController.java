@@ -1,5 +1,6 @@
 package com.example.mini.controller;
 
+import com.example.mini.common.JwtUtil;
 import com.example.mini.common.Result;
 import com.example.mini.service.WechatService;
 import org.springframework.web.bind.annotation.*;
@@ -18,11 +19,14 @@ public class LoginController {
     @Resource
     private WechatService wechatService;
 
+    @Resource
+    private JwtUtil jwtUtil;
+
     /**
      * 微信小程序登录
      *
      * @param params 包含code的请求体
-     * @return openId（实际项目中应返回自定义token）
+     * @return openId + JWT token
      */
     @PostMapping("/login")
     public Result<Map<String, String>> login(@RequestBody Map<String, String> params) {
@@ -33,10 +37,11 @@ public class LoginController {
 
         try {
             String openId = wechatService.getOpenId(code);
+            String token = jwtUtil.generateToken(openId);
+
             Map<String, String> result = new HashMap<>();
             result.put("openId", openId);
-            // 实际项目中这里应该生成JWT token
-            result.put("token", "mock-token-" + openId);
+            result.put("token", token);
             return Result.success(result);
         } catch (RuntimeException e) {
             return Result.error(e.getMessage());

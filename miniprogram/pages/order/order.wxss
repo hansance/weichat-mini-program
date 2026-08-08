@@ -80,6 +80,15 @@
   background: #fff;
 }
 
+.order-actions {
+  display: flex;
+  gap: 16rpx;
+}
+
+.btn-pay {
+  font-size: 24rpx;
+}
+
 .empty {
   text-align: center;
   padding: 200rpx 0;

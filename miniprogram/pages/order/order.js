@@ -50,6 +50,39 @@ Page({
     })
   },
 
+  // 模拟支付
+  payOrder(e) {
+    const id = e.currentTarget.dataset.id
+    const openId = wx.getStorageSync('openId')
+
+    wx.showModal({
+      title: '确认支付',
+      content: '确定要支付该订单吗？（开发环境模拟支付）',
+      success: (res) => {
+        if (res.confirm) {
+          wx.showLoading({ title: '支付中...' })
+          wx.request({
+            url: `${app.globalData.baseUrl}/api/pay/mock/${id}?openId=${openId}`,
+            method: 'POST',
+            success: (res) => {
+              wx.hideLoading()
+              if (res.data.code === 200) {
+                wx.showToast({ title: '支付成功', icon: 'success' })
+                this.loadOrders()
+              } else {
+                wx.showToast({ title: res.data.message, icon: 'none' })
+              }
+            },
+            fail: () => {
+              wx.hideLoading()
+              wx.showToast({ title: '网络错误', icon: 'none' })
+            }
+          })
+        }
+      }
+    })
+  },
+
   // 取消订单
   cancelOrder(e) {
     const id = e.currentTarget.dataset.id

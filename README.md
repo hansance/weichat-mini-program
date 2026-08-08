@@ -9,8 +9,10 @@
 - ✅ 首页服务列表（分类筛选）
 - ✅ 服务详情展示
 - ✅ 在线预约下单
+- ✅ 模拟支付（开发环境）
 - ✅ 我的订单列表
 - ✅ 取消订单
+- ✅ 订单超时自动取消（RabbitMQ 延迟消息）
 
 ## 项目结构
 
@@ -27,6 +29,7 @@ wechat-mini-example/
 │       ├── controller/
 │       │   ├── ServiceController.java    # 服务接口
 │       │   ├── OrderController.java      # 订单接口
+│       │   ├── PayController.java        # 支付接口（模拟）
 │       │   └── LoginController.java      # 登录接口
 │       ├── entity/
 │       │   ├── HomeService.java          # 服务实体
@@ -204,6 +207,7 @@ mvn clean spring-boot:run
 | POST | /api/order/create | 创建订单 |
 | GET  | /api/order/my?openId= | 我的订单列表 |
 | POST | /api/order/cancel/{id}?openId= | 取消订单 |
+| POST | /api/pay/mock/{orderId}?openId= | 模拟支付（开发环境） |
 
 ## 调试指南
 
@@ -249,6 +253,9 @@ curl http://localhost:8080/api/service/detail/1
 curl -X POST http://localhost:8080/api/order/create \
   -H "Content-Type: application/json" \
   -d '{"openId":"test_user_001","serviceId":1,"contactName":"张三","contactPhone":"13800138000","address":"北京市朝阳区xxx","appointmentTime":"2026-08-01T10:00:00"}'
+
+# 测试模拟支付（将订单状态从"待支付"改为"待服务"）
+curl -X POST "http://localhost:8080/api/pay/mock/1?openId=test_user_001"
 
 # 测试查询订单
 curl http://localhost:8080/api/order/my?openId=test_user_001

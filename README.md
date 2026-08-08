@@ -581,10 +581,10 @@ wx.request({
 
 #### 5. 开发阶段模拟支付
 
-在没有商户号的情况下，可以在后端添加一个模拟支付接口用于测试：
+项目已内置模拟支付接口（`PayController.java`），无需商户号即可测试完整订单流程：
 
 ```java
-// 仅限开发环境使用！生产环境必须删除
+// PayController.java — 仅限开发环境使用！生产环境必须替换为真实微信支付
 @PostMapping("/api/pay/mock/{orderId}")
 public Result<String> mockPay(@PathVariable Long orderId, @RequestParam String openId) {
     // 直接将订单状态改为已支付
@@ -599,10 +599,22 @@ public Result<String> mockPay(@PathVariable Long orderId, @RequestParam String o
 }
 ```
 
-小程序端测试：
+小程序端已集成「去支付」按钮（`pages/order/order.js` 中的 `payOrder` 方法），点击后调用模拟支付接口。
+
+curl 测试：
 ```bash
 curl -X POST "http://localhost:8080/api/pay/mock/1?openId=dev_test_user_001"
 ```
+
+#### 6. 从模拟支付切换到真实支付
+
+当你具备企业主体 + 商户号后，按以下步骤切换：
+
+1. 在 `pom.xml` 中添加 `wechatpay-java` 依赖（见上方步骤 2）
+2. 在 `application.yml` 中配置商户号、API 密钥、证书路径
+3. 将 `PayController.java` 中的 `mockPay` 方法替换为真实的 `createPayment` + `payNotify`
+4. 将小程序 `order.js` 中的 `payOrder` 方法改为调用 `/api/pay/create/{orderId}`，并用返回参数调用 `wx.requestPayment()`
+5. 确保回调地址 (`notify-url`) 为公网 HTTPS 地址
 
 ---
 

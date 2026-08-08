@@ -1,7 +1,11 @@
+/Users/elifhan/EMB/wechat-mini-example/backend/src/main/java/com/example/mini/common/JwtUtil.java
+/Users/elifhan/EMB/wechat-mini-example/backend/src/main/java/com/example/mini/config/AuthInterceptor.java
 /Users/elifhan/EMB/wechat-mini-example/backend/src/main/java/com/example/mini/entity/FailMsg.java
+/Users/elifhan/EMB/wechat-mini-example/backend/src/main/java/com/example/mini/config/WebConfig.java
 /Users/elifhan/EMB/wechat-mini-example/backend/src/main/java/com/example/mini/mapper/FailMsgMapper.java
 /Users/elifhan/EMB/wechat-mini-example/backend/src/main/java/com/example/mini/service/WechatService.java
 /Users/elifhan/EMB/wechat-mini-example/backend/src/main/java/com/example/mini/controller/OrderController.java
+/Users/elifhan/EMB/wechat-mini-example/backend/src/main/java/com/example/mini/controller/PayController.java
 /Users/elifhan/EMB/wechat-mini-example/backend/src/main/java/com/example/mini/config/CorsConfig.java
 /Users/elifhan/EMB/wechat-mini-example/backend/src/main/java/com/example/mini/controller/ServiceController.java
 /Users/elifhan/EMB/wechat-mini-example/backend/src/main/java/com/example/mini/controller/LoginController.java

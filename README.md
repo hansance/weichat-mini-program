@@ -22,10 +22,14 @@ wechat-mini-example/
 │   ├── pom.xml
 │   └── src/main/java/com/example/mini/
 │       ├── MiniApplication.java          # 启动类
-│       ├── common/Result.java            # 统一响应
+│       ├── common/
+│       │   ├── Result.java               # 统一响应
+│       │   └── JwtUtil.java              # JWT工具类
 │       ├── config/
 │       │   ├── CorsConfig.java           # 跨域配置
-│       │   └── MybatisPlusConfig.java    # 分页插件
+│       │   ├── MybatisPlusConfig.java    # 分页插件
+│       │   ├── AuthInterceptor.java      # JWT认证拦截器
+│       │   └── WebConfig.java            # 拦截器注册
 │       ├── controller/
 │       │   ├── ServiceController.java    # 服务接口
 │       │   ├── OrderController.java      # 订单接口
@@ -198,16 +202,18 @@ mvn clean spring-boot:run
 
 ## API 接口文档
 
-| 方法 | 路径 | 说明 |
-|------|------|------|
-| POST | /api/auth/login | 微信登录，传入code |
-| GET  | /api/service/list?category= | 获取服务列表 |
-| GET  | /api/service/page?pageNum=&pageSize=&category= | 分页查询服务 |
-| GET  | /api/service/detail/{id} | 服务详情 |
-| POST | /api/order/create | 创建订单 |
-| GET  | /api/order/my?openId= | 我的订单列表 |
-| POST | /api/order/cancel/{id}?openId= | 取消订单 |
-| POST | /api/pay/mock/{orderId}?openId= | 模拟支付（开发环境） |
+| 方法 | 路径 | 说明 | 认证 |
+|------|------|------|------|
+| POST | /api/auth/login | 微信登录，传入code | 无 |
+| GET  | /api/service/list?category= | 获取服务列表 | 无 |
+| GET  | /api/service/page?pageNum=&pageSize=&category= | 分页查询服务 | 无 |
+| GET  | /api/service/detail/{id} | 服务详情 | 无 |
+| POST | /api/order/create | 创建订单 | Bearer Token |
+| GET  | /api/order/my | 我的订单列表 | Bearer Token |
+| POST | /api/order/cancel/{id} | 取消订单 | Bearer Token |
+| POST | /api/pay/mock/{orderId} | 模拟支付（开发环境） | Bearer Token |
+
+> 需要认证的接口必须在请求头中携带 `Authorization: Bearer <token>`，token 由登录接口返回。
 
 ## 调试指南
 
@@ -249,17 +255,21 @@ curl http://localhost:8080/api/service/list?category=cleaning
 # 测试服务详情
 curl http://localhost:8080/api/service/detail/1
 
-# 测试创建订单
+# 测试创建订单（需要 Bearer Token）
 curl -X POST http://localhost:8080/api/order/create \
   -H "Content-Type: application/json" \
-  -d '{"openId":"test_user_001","serviceId":1,"contactName":"张三","contactPhone":"13800138000","address":"北京市朝阳区xxx","appointmentTime":"2026-08-01T10:00:00"}'
+  -H "Authorization: Bearer <token>" \
+  -d '{"serviceId":1,"contactName":"张三","contactPhone":"13800138000","address":"北京市朝阳区xxx","appointmentTime":"2026-08-01T10:00:00"}'
 
 # 测试模拟支付（将订单状态从"待支付"改为"待服务"）
-curl -X POST "http://localhost:8080/api/pay/mock/1?openId=test_user_001"
+curl -X POST "http://localhost:8080/api/pay/mock/1" \
+  -H "Authorization: Bearer <token>"
 
 # 测试查询订单
-curl http://localhost:8080/api/order/my?openId=test_user_001
+curl -H "Authorization: Bearer <token>" http://localhost:8080/api/order/my
 ```
+
+> `<token>` 由登录接口 `/api/auth/login` 返回。开发阶段可使用 mock 登录获取（见「开发阶段跳过微信登录」章节）。
 
 #### 5. 后端常见问题
 
@@ -370,7 +380,8 @@ globalData: {
 2. 在微信公众平台 → 开发管理 → 服务器域名中添加你的域名
 3. 去掉「不校验合法域名」的勾选
 4. 配置真实的微信 `app-id` 和 `app-secret`
-5. 登录接口应返回 JWT Token 而非直接暴露 openId
+5. 修改 `jwt.secret` 为高强度随机字符串（至少32字符），不要使用默认值
+6. 登录接口已返回 JWT Token，确保 token 过期时间合理（默认24小时）
 
 ---
 

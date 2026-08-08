@@ -1,0 +1,49 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/wechat_mini_demo?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: root123
+  # RabbitMQ 配置
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: /
+    # 消息发送确认（到达交换机）
+    publisher-confirm-type: correlated
+    # 消息路由失败回调
+    publisher-returns: true
+    # 消费者配置
+    listener:
+      simple:
+        # 手动确认模式
+        acknowledge-mode: auto
+        # 消费失败重试
+        retry:
+          enabled: true
+          max-attempts: 3
+          initial-interval: 3000
+          multiplier: 1.5
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      id-type: auto
+
+# 微信小程序配置
+wechat:
+  mini:
+    app-id: wx7aa49d8518ede579
+    app-secret: f1dda8646aa5fa84245355f833578a5e
+
+logging:
+  level:
+    com.example: debug

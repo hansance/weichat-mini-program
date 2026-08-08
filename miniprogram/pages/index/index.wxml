@@ -1,0 +1,39 @@
+<!--pages/index/index.wxml-->
+<view class="container">
+  <!-- 分类导航 -->
+  <scroll-view scroll-x class="category-bar">
+    <view
+      wx:for="{{categories}}"
+      wx:key="id"
+      class="category-item {{currentCategory === item.id ? 'active' : ''}}"
+      bindtap="switchCategory"
+      data-id="{{item.id}}">
+      {{item.name}}
+    </view>
+  </scroll-view>
+
+  <!-- 服务列表 -->
+  <view class="service-list">
+    <view
+      wx:for="{{serviceList}}"
+      wx:key="id"
+      class="service-card"
+      bindtap="goDetail"
+      data-id="{{item.id}}">
+      <image class="service-img" src="{{item.imageUrl}}" mode="aspectFill"></image>
+      <view class="service-info">
+        <view class="service-name">{{item.name}}</view>
+        <view class="service-desc">{{item.description}}</view>
+        <view class="service-bottom">
+          <text class="service-price">¥{{item.price}}</text>
+          <text class="service-duration">约{{item.duration}}分钟</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view wx:if="{{serviceList.length === 0 && !loading}}" class="empty">
+      <text>暂无服务</text>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,51 @@
+<!--pages/detail/detail.wxml-->
+<view class="container" wx:if="{{service}}">
+  <!-- 服务信息 -->
+  <view class="detail-header">
+    <image class="detail-img" src="{{service.imageUrl}}" mode="aspectFill"></image>
+    <view class="detail-info">
+      <view class="detail-name">{{service.name}}</view>
+      <view class="detail-price">¥{{service.price}}</view>
+      <view class="detail-duration">服务时长约 {{service.duration}} 分钟</view>
+      <view class="detail-desc">{{service.description}}</view>
+    </view>
+  </view>
+
+  <!-- 预约表单 -->
+  <view class="order-form">
+    <view class="form-title">预约信息</view>
+
+    <view class="form-item">
+      <text class="form-label">联系人</text>
+      <input class="form-input" placeholder="请输入联系人姓名" bindinput="onInputName" value="{{contactName}}" />
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">电话</text>
+      <input class="form-input" type="number" maxlength="11" placeholder="请输入手机号" bindinput="onInputPhone" value="{{contactPhone}}" />
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">地址</text>
+      <input class="form-input" placeholder="请输入服务地址" bindinput="onInputAddress" value="{{address}}" />
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">预约日期</text>
+      <picker mode="date" start="2026-07-27" bindchange="onDateChange">
+        <view class="form-input picker">
+          {{appointmentTime || '请选择预约日期'}}
+        </view>
+      </picker>
+    </view>
+  </view>
+
+  <!-- 提交按钮 -->
+  <view class="submit-bar">
+    <view class="total-price">
+      <text>合计：</text>
+      <text class="price-text">¥{{service.price}}</text>
+    </view>
+    <button class="btn-primary submit-btn" bindtap="submitOrder">立即预约</button>
+  </view>
+</view>

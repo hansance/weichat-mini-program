@@ -1,0 +1,110 @@
+/* pages/detail/detail.wxss */
+.detail-header {
+  background: #fff;
+  border-radius: 16rpx;
+  overflow: hidden;
+  margin-bottom: 20rpx;
+}
+
+.detail-img {
+  width: 100%;
+  height: 400rpx;
+}
+
+.detail-info {
+  padding: 30rpx;
+}
+
+.detail-name {
+  font-size: 36rpx;
+  font-weight: bold;
+  margin-bottom: 16rpx;
+}
+
+.detail-price {
+  font-size: 40rpx;
+  color: #e74c3c;
+  font-weight: bold;
+  margin-bottom: 12rpx;
+}
+
+.detail-duration {
+  font-size: 24rpx;
+  color: #999;
+  margin-bottom: 16rpx;
+}
+
+.detail-desc {
+  font-size: 28rpx;
+  color: #666;
+  line-height: 1.6;
+}
+
+.order-form {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  margin-bottom: 160rpx;
+}
+
+.form-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-bottom: 30rpx;
+  padding-left: 16rpx;
+  border-left: 6rpx solid #4A90D9;
+}
+
+.form-item {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.form-label {
+  width: 140rpx;
+  font-size: 28rpx;
+  color: #333;
+  flex-shrink: 0;
+}
+
+.form-input {
+  flex: 1;
+  font-size: 28rpx;
+  color: #333;
+}
+
+.form-input.picker {
+  color: #999;
+}
+
+.submit-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20rpx 30rpx;
+  padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
+  background: #fff;
+  box-shadow: 0 -4rpx 12rpx rgba(0, 0, 0, 0.06);
+}
+
+.total-price {
+  font-size: 28rpx;
+}
+
+.price-text {
+  font-size: 36rpx;
+  color: #e74c3c;
+  font-weight: bold;
+}
+
+.submit-btn {
+  padding: 0 60rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+}
